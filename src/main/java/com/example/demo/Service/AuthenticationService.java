@@ -64,20 +64,21 @@ public class AuthenticationService {
         return new AuthenticationResponse(token);
 
     }
-    public AuthenticationResponse login(User request) {
-        authenticationManager.authenticate(
+    public String login(User request) {
+      if(  authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
                         request.getPassword()
                 )
-        );
+        ) != null){
 
         User user = repository.findByUsername(request.getUsername()).orElseThrow();
-        String token = jwtService.generateToken(user);
-     
-        return new AuthenticationResponse(token);
+        return "Login Successful";
 
     }
+      else {
+    	  return "Login Failed";
+      }
     
    
-}
+}}
